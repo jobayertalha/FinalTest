@@ -2,6 +2,8 @@
 #include <string>
 #include <memory>
 #include <gtest/gtest.h>
+#include "pch.h"
+
 
 //abstarct interfaces
 class Window {
@@ -77,4 +79,42 @@ public:
     }
 };
 
+// G-Test 
+TEST(WindowsFactoryTest, CreateComponents) {
+    WindowsFactory factory;
+    auto window = factory.createWindow();
+    auto scrollbar = factory.createScrollBar();
+    EXPECT_EQ(window->render(), "Rendering Windows Window");
+    EXPECT_EQ(scrollbar->render(), "Rendering Windows ScrollBar");
+}
+
+TEST(LinuxFactoryTest, CreateComponents) {
+    LinuxFactory factory;
+    auto window = factory.createWindow();
+    auto scrollbar = factory.createScrollBar();
+    EXPECT_EQ(window->render(), "Rendering Linux Window");
+    EXPECT_EQ(scrollbar->render(), "Rendering Linux ScrollBar");
+}
+
+//  Demo 
+void Demo(const GUIFactory& factory, const std::string& platformName) {
+    std::cout << "Demo for " << platformName << ":\n";
+    auto window = factory.createWindow();
+    auto scrollbar = factory.createScrollBar();
+    std::cout << window->render() << std::endl;
+    std::cout << scrollbar->render() << std::endl;
+    std::cout << "-----------------------------\n";
+}
+
+//  Main 
+int main(int argc, char** argv) {
+    // Run demo
+    WindowsFactory windowsFactory;
+    LinuxFactory linuxFactory;
+
+    Demo(windowsFactory, "Windows");
+    Demo(linuxFactory, "Linux");
+
+   
+}
 
