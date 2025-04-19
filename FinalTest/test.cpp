@@ -4,8 +4,7 @@
 #include <gtest/gtest.h>
 #include "pch.h"
 
-
-//abstarct interfaces
+// Abstract
 class Window {
 public:
     virtual std::string render() const = 0;
@@ -18,7 +17,7 @@ public:
     virtual ~ScrollBar() {}
 };
 
-//Concrete Products - Windows 
+// Concrete-Win
 class WindowsWindow : public Window {
 public:
     std::string render() const override {
@@ -33,7 +32,7 @@ public:
     }
 };
 
-//  Concrete Products - Linux
+// Concrete-Lin
 class LinuxWindow : public Window {
 public:
     std::string render() const override {
@@ -48,7 +47,7 @@ public:
     }
 };
 
-//  Abstract Factory 
+// Abs
 class GUIFactory {
 public:
     virtual std::unique_ptr<Window> createWindow() const = 0;
@@ -56,7 +55,7 @@ public:
     virtual ~GUIFactory() {}
 };
 
-// Concrete Factories
+// Conc
 class WindowsFactory : public GUIFactory {
 public:
     std::unique_ptr<Window> createWindow() const override {
@@ -79,7 +78,7 @@ public:
     }
 };
 
-// G-Test 
+// G-Test
 TEST(WindowsFactoryTest, CreateComponents) {
     WindowsFactory factory;
     auto window = factory.createWindow();
@@ -96,8 +95,8 @@ TEST(LinuxFactoryTest, CreateComponents) {
     EXPECT_EQ(scrollbar->render(), "Rendering Linux ScrollBar");
 }
 
-//  Demo 
-void Demo(const GUIFactory& factory, const std::string& platformName) {
+// demo
+void runtimeDemo(const GUIFactory& factory, const std::string& platformName) {
     std::cout << "Demo for " << platformName << ":\n";
     auto window = factory.createWindow();
     auto scrollbar = factory.createScrollBar();
@@ -106,15 +105,16 @@ void Demo(const GUIFactory& factory, const std::string& platformName) {
     std::cout << "-----------------------------\n";
 }
 
-//  Main 
+//  Main
 int main(int argc, char** argv) {
-    // Run demo
+    // demo
     WindowsFactory windowsFactory;
     LinuxFactory linuxFactory;
 
-    Demo(windowsFactory, "Windows");
-    Demo(linuxFactory, "Linux");
+    runtimeDemo(windowsFactory, "Windows");
+    runtimeDemo(linuxFactory, "Linux");
 
-   
+    // g-test
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
-
